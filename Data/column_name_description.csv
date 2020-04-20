@@ -1,0 +1,16 @@
+column_name,description
+state,State
+county,County
+year,Accident year
+month,Accident month
+day,Accident day
+hour,Accident hour
+minute,Accident minute
+man_coll,Manner of collision
+veh_no,Number of vehicles involved
+body_typ,Vehicle body type
+per_no,Number of persons involved
+age,Age
+sex,Sex
+alcohol,Alcohol involvement
+inj_sev,Injury severity

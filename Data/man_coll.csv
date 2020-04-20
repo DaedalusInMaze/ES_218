@@ -1,0 +1,12 @@
+man_coll,description
+0,Not a Collision with a Motor Vehicle In-Transport
+1,Front-to-Rear
+2,Front-to-Front
+6,Angle
+7,Sideswipe-Same Direction
+8,Sideswipe-Opposite Direction
+9,Rear-to-Side
+10,Rear-to-Rear
+11,Other
+98,Not Reported
+99,Unknown
