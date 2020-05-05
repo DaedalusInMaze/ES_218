@@ -19,13 +19,14 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message = FALSE)
 # Install packages
 library(stringr)
 library(tidyr)
-library(tidyr)
+library(forcats)
 library(ggplot2)
 library(dplyr)
 library(tmap) 
 #library(spData)
 #library(spDataLarge)
 library(sf)
+library(gridExtra)
 
 #install.packages('spDataLarge', repos='https://nowosad.github.io/drat/', type='source')
 ```
@@ -94,9 +95,9 @@ The results section looks at each variable following the order of: Region, Sex, 
 
 \newline
 
-#### Here I wan to Inclue a Map (Region)
+#### Here I wan to Include a Map later on (Region)
 #### Region
-```{r Accidents breakdown by four main regions}
+```{r Accidents breakdown by four main regions, fig.width=6, fig.height= 5, fig.align='left'}
 # Region by year
 dat_reg <- dat_full %>%
   group_by(year, Region) %>% 
@@ -111,9 +112,9 @@ ggplot(dat_reg, aes(year, percent, fill = Region)) +
   xlab('Year') + ylab('Percentage of Accidents') + 
   ggtitle('Accidents breakdown by Region') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 ```
 
 Based on the barchart showing distribution of accidents across the four regions, we can observe that the percentage of accidents for each state did not fluctuate a lot over the course of the 22 years. Comapring the four regions, we see that the South has the most accidents which accounted for nearly 50%. 
@@ -122,8 +123,8 @@ This makes intuitive sense as geographically, we can see that the South covers l
 
 \newline
 
-####Sex
-```{r Studying variable sex, out.width='48%' }
+#### Sex
+```{r Studying variable sex}
 
 # Make a graph of how accidents happen related to sex
 # male vs female by year
@@ -141,9 +142,9 @@ ggplot(dat_sex, aes(year, percent, col = sex)) + geom_point() +
   xlab('Year') + ylab('Percentage of Accidents') + 
   ggtitle('Accidents breakdown by sex') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold")) ->p1
 
 # male vs female by region
 dat_sex_loc <- dat_full %>% 
@@ -161,9 +162,11 @@ ggplot(dat_sex_loc, aes(Region, percent, fill = sex)) +
   xlab('Region') + ylab('Percentage of Accidents') + 
   ggtitle('Accidents breakdown by Region and Sex') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold")) -> p2
+
+grid.arrange(p1, p2, nrow = 1)
 ```
 
 Here we consider how sex of the driver can contribute to the occurence of vehicular accident. From the graph on the left, we again observes a very constant fluctuation over time. About 65% of the accidents are caused by male drivers and about 35% of the accidents are caused by female drivers. 
@@ -171,7 +174,7 @@ Here we consider how sex of the driver can contribute to the occurence of vehicu
 However, when we observe the graph on the right, we did divergence in sex when we neglect the time dimension and only studies region. So, I suppose that there is no divergence when it comes to the effect of sex of driver on the accident between the regions.
 
 #### Collision
-```{r Studying variable collision}
+```{r Studying variable collision, fig.width=6, fig.height= 4, fig.align='left'}
 # collision by year
 
 dat_col <- dat_full %>%
@@ -197,9 +200,9 @@ ggplot(dat_col, aes(year, percent, col = Collision)) + geom_point() +
   geom_line() + xlab('Year') + ylab('Percentage of Accidents') + 
   ggtitle('Accidents breakdown by Collision type') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 
 
 # keep the Region variable
@@ -227,9 +230,9 @@ ggplot(dat_col_reg, aes(year, percent, col = Collision)) +
   xlab('Year') + ylab('Percentage of Accidents') + 
   ggtitle('Accidents breakdown by Collision type') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 ```
 The next variable that I considered in the study is the type of collision. The metadata for this variable is very incomplete as there is not explanation for type 3 and 4 which I think shall represent the collision between the front of one car and the side of the other and the collision between the front of one car and angle of anther. But without further support, we cannot dig deeper into these two categories. 
 
@@ -239,7 +242,7 @@ When we break down the collision by state, we can pinpoint the shape of accident
 
 #### Age
 
-```{r Age variable}
+```{r Age variable, fig.width=6, fig.height= 4, fig.align='left'}
 
 ## AGE
 dat_age <- dat_full %>%
@@ -252,15 +255,15 @@ ggplot(dat_age, aes(year, avg, col = Region)) + geom_point() +
   xlab('Year') + ylab('Average age of accident drivers') + 
   ggtitle('Average age of accident drivers') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 ```
 We then shifts our focus to numerical variables. The first of which is average of accident drivers.By using a loess graph, we find that, interestingly, as time goes on, the average age of accident drivers also increase. With both increased about 16 years, we can suggest that there is a certain group of people that is very likely to get involved in traffic accidents. This trend is also observed for the four regions respectively, with a slight divergence after year 2015.
 
 
-##### Number of person involved per accident
-```{r Number of ppl invovled}
+#### Number of person involved per accident
+```{r Number of ppl invovled, fig.width=6, fig.height= 4, fig.align='left'}
 
 # Number of person vs year
 dat_per <- dat_full %>%
@@ -272,9 +275,9 @@ ggplot(dat_per, aes(year, avg, col = Region)) + geom_point() +
   xlab('Year') + ylab('Average number of people involved in accident') + 
   ggtitle('Average number of people involved') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 
 
 
@@ -283,7 +286,7 @@ Contrary to the average age which shows a positive trend, we see a downturn of a
 
 
 ##### Severity
-```{r Severity of accidents}
+```{r Severity of accidents, fig.width=6, fig.height= 5, fig.align='left'}
 
 # Number of person vs year
 # severity by region
@@ -297,9 +300,9 @@ ggplot(dat_sev, aes(year, avg, col = Region)) + geom_point() +
   xlab('Year') + ylab('Average severity of accidents') + 
   ggtitle('Severity of accidents') +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold"))
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold"))
 
 # digging deeper into state
 
@@ -315,38 +318,46 @@ dat_states <- dat_state %>%
   ungroup()
 
 # create plot
-ggplot(dat_states, aes(state_name)) + geom_bar() +
-  xlab("State") + ylab("Average severity for each state") + coord_flip() + 
+ggplot(dat_states, aes(fct_reorder(state_name, avrg_sev, .fun = median), avrg_sev)) +
+  geom_bar(stat = 'identity') + coord_flip() + 
+  xlab("State") + ylab("Average severity for each state") +
   theme(
-    plot.title = element_text(color="black", size=14, face="bold.italic"),
-    axis.title.x = element_text(color="black", size=14, face="bold"),
-    axis.title.y = element_text(color="black", size=14, face="bold")) 
+    plot.title = element_text(color="black", size=12, face="bold.italic"),
+    axis.title.x = element_text(color="black", size=12, face="bold"),
+    axis.title.y = element_text(color="black", size=12, face="bold")) 
 ```
-When it comes to severity, I treat the original categorical variable, which has 6 levels (after dropping unknowns), as a numeric variable. The reason that I think it still functions is because in the dataset, the severity of accident increases with the figure assigned to it. Thus, we can treat it as a quantitative variable without losing its original function. From our graph, we can observe a increase of severity for all Regions except NorthEast which shows a 'S' shape. But overall, the severity of NorthEast accidents also increase.
+When it comes to severity, I treat the original categorical variable, which has 6 levels (after dropping unknowns), as a numeric variable. The reason that I think it still functions is because in the dataset, the severity of accident increases with the figure assigned to it. 
+
+Thus, we can treat it as a quantitative variable without losing its original function. From our graph, we can observe a increase of severity for all Regions except NorthEast which shows a 'S' shape. But overall, the severity of NorthEast accidents also increase.The only draw back of categorical data is that when doing a spread location plot, medians for all four locations equals four and thus not variance can be found.
 
 This is conflicting when we recall the previous result that number of people involved in the accidents decrease. Thus, to study the relationship between severity and the other variables, I will study it using linear models.
 
-I also breakdown the severity into the state level 
+I also breakdown the severity into the state level, we can see that the average severity, between states does not differ a lot even when we compare Montana with Florida. 
 
-#### Model
-
-#### Model 1 with only age and region
+#### Model 1
 ```{r Model 1: with only age and region}
 lm_sev_age <- lm(inj_sev ~ age * Region, dat = dat_full)
 summary(lm_sev_age)
 ```
+In terms of the first model, I find that all the variables except South is significant. This fits my hypothesis that different areas have different impact on the accident and its variables which include severity. The South, just as we have been mentioning, accounts for nearly half of the sample of the overall dataset so we would expect it not to be significant. 
+
+Overall, we see that age has a positive retionship with severity, confirming our hypothesis.And control group, which is Midwest here, has lower severity than the other groups.
+
+\newline
 
 #### Model 2
 ``` {r Model 2: with other variables}
 lm_all <- lm(inj_sev ~ age * Region + sex + man_coll + per_no, dat = dat_full)
 summary(lm_all)
 ```
-
-
-
-
-
+When we continue and include other variables into the model, the results is very satisfying as all variables turn significant (again except from South). Judging from the sign of the variables, we see that woman is less likely to involve in severe accidents, and the collisions with smaller index are more dangerous (e.g. accidents happen at crossroad is very likely to be severe accident). The number of person involved in accident is inversely related to severity, as we have discussed previously. 
 
 
 ### Discussion
-Overall, both the study on regional effect on traffic accident and the study on how other variables affect severity shows significant results.
+Overall, both the study on regional effect on traffic accident and the study on how other variables affect severity shows significant results. From the graphs, we find that the variables for accidents do vary from region to region. The South, compared with other groups, shows a strong impact on the overall data, especially when studying the type of collisions. Yet, when it comes to age of drivers, average number of people involved, and severity, South group is not significantly differnt from other groups.
+
+The findings do suggest that where the accident do affect the accident from both the graphs and from our models. This can be due to many factors including geographic factors, cultural reasons, etc. It is important to understand what factors leads to what outcome in order to prevent severe traffic accident, whether it is smarter regulation, stricter road tests or better road condition.
+
+On the other hand, we also tried to identify what factors can lead to more detrimental accidents. Results show that an aged male driver who is passing a crossroad with only himself in the car driving in the NorthEast will be the most likely to get involved in a severe vehicular accident than a light one. This makes sense from the outside perspective as if there is one more person sitting in the car, or if he is younger and can react faster, the damage can be reduced.
+
+So this study provides insight of what affects severity of traffic accidents and how location can affect the accident. This is important for future decision making and accident prevention as we know under what circumstances the accidents may happen and how severe it can be. Still, this is just a very preliminary study and in order to diminish the accidents, more factors have to be included and the states need to learn from each other to find out what factors are contributing the road safety and what are not.

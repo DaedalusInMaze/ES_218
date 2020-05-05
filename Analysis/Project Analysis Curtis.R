@@ -224,7 +224,7 @@ dat_states <- dat_state %>%
   summarise(avrg_sev = mean(inj_sev))
 
 # create plot
-ggplot(dat_states, aes(state_name)) + geom_bar() +
+ggplot(dat_states, aes(forinfreq(state_name, max(avrg_sev)), avrg_sev)) + geom_bar(stat = 'identity') +
   xlab("State") + ylab("Average severity for each state") +
   coord_flip() + 
   theme(
@@ -233,18 +233,19 @@ ggplot(dat_states, aes(state_name)) + geom_bar() +
     axis.title.y = element_text(color="black", size=14, face="bold")) 
 
 
+
 # spread location to test severity across loaction
 sl1 <- dat_full %>% 
-  group_by(Region) %>% 
   filter(sex %in% c(1,2)) %>% 
+  group_by(Region) %>% 
   mutate(med = median(inj_sev),
-         res = sqrt(abs(inj_sev - med)))
+         res = sqrt(abs(inj_sev - med))) %>% 
+  summarise(med = median(inj_sev), med_res = median(res))
 
-ggplot(sl1, aes(year, res)) +
-  geom_jitter(alpha = 0.4, width = 5, height = 0) +
-  stat_sum(fun.y = median, geom = 'line', col = 'red') +
+ggplot(sl1, aes(med, med_res)) +
+  geom_point() +
   ylab(expression(sqrt(abs('Residuals')))) +
-  geom_text(aes(x = med, y = 200, label = year))
+  geom_text(aes(x = med, y = 200, label = Region))
 
 
 
