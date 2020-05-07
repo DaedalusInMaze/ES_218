@@ -1,12 +1,14 @@
 ---
-title: "ES218 Project: US Vehicular Accidents"
+title: 'ES218 Project: US Vehicular Accidents'
 author: "Curtis Zhuang"
 date: "5/4/2020"
 output:
+  word_document:
+    toc: yes
   html_document:
     code_folding: hide
-    toc: true
-    toc_float: true
+    toc: yes
+    toc_float: yes
 ---
 
 
