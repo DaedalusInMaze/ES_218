@@ -13,7 +13,7 @@ install.packages('spDataLarge', repos='https://nowosad.github.io/drat/', type='s
 
 # Want to test if sex, car type, 
 
-dat <- readRDS('Data/farsp.RDS')
+dat <- readRDS('../Data/farsp.RDS')
 
 # group the states into four main regions in U.S
 
@@ -263,6 +263,10 @@ summary(lm_sev_age)
 lm_all <- lm(inj_sev ~ age * Region + sex + man_coll + per_no, dat = dat_full)
 summary(lm_all)
 
+summary(lm_all$residuals)
+
+qqnorm(lm_all$residuals, pch = 1, frame = FALSE)
+qqline(lm_all$residuals, col = "steelblue", lwd = 2)
 ## fits and residuals
 
 

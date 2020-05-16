@@ -3,12 +3,12 @@ title: 'ES218 Project: US Vehicular Accidents'
 author: "Curtis Zhuang"
 date: "5/4/2020"
 output:
-  word_document:
-    toc: yes
   html_document:
     code_folding: hide
     toc: yes
     toc_float: yes
+  word_document:
+    toc: yes
 ---
 
 
@@ -24,7 +24,6 @@ library(forcats)
 library(tidyr)
 library(ggplot2)
 library(dplyr)
-library(tidyr)
 ```
 
 
@@ -253,7 +252,7 @@ dat_age <- dat_full %>%
 ggplot(dat_age, aes(year, med, col = Region)) + geom_point() +
   geom_smooth(se = FALSE, method = 'loess') +
   xlab('Year') + ylab('Median age of accident drivers') + 
-  ggtitle('Median age of accident drivers') +
+  ggtitle('Age') +
   theme(
     plot.title = element_text(color="black", size=11, face="bold.italic"),
     axis.title.x = element_text(color="black", size=11, face="bold"),
@@ -275,7 +274,7 @@ dat_per <- dat_full %>%
 
 ggplot(dat_per, aes(year, avg, col = Region)) + geom_point() +
   geom_smooth(se = FALSE, method = 'loess') +
-  xlab('Year') + ylab('Average number of people involved in accident') + 
+  xlab('Year') + ylab('Number of people') + 
   ggtitle('Average number of people involved') +
   theme(
     plot.title = element_text(color="black", size=11, face="bold.italic"),
@@ -369,8 +368,7 @@ I used a simple linear regression between severity and regions to see if there i
 
 The result above suggets that there is a significant difference between severity of the four regions as the p value for the three variables are significant at the 0.05 level. This is in favor of my hypothesis that there is regional difference. On average, Midwest's severity is 3.2 over the whole period. Compared with Midwest, we see that the Northeast has more severity while the other two regions have less severe accidents on average. 
 
-Thus, we see that there is a regional difference in severity when I apply the single linear regression. However, it is important to check if the result hold by looking at the residuals plot.
-
+Thus, we see that there is a regional difference in severity when I apply the single linear regression. 
 \newline
 
 #### Extended model
@@ -382,8 +380,13 @@ I then continue and included other variables (sex, age, collision type and numbe
 
 Judging from the sign of the variables, we see that woman is less likely to involve in severe accidents, and the collisions with smaller index are more dangerous (e.g. traffic accidents involving a non-motor party). The number of person involved in accident is inversely related to severity, as we have discussed previously. 
 
+```{r residuals, fig.width=6, fig.height= 5, fig.align='left'}
 
-I again checked the residuals to see if the conditiosn for the linear model holds.
+qqnorm(lm_all$residuals, pch = 1, frame = FALSE, main = 'QQ plot for residuals')
+qqline(lm_all$residuals, col = "steelblue", lwd = 2)
+```
+
+Though it may be important to check the residuals to see if the conditions for the linear model holds, especially even spread. From the qq-plot, we see that the shape of residuals does not follow a straight line. But as the severity is categorical in nature, we would still consider it to fit the line. More importantly, the fact that our model included all the data points, rather than samples of the vehicular accidents data, provide support for our model.
 
 
 ### Discussion
@@ -403,3 +406,6 @@ The study finds female drivers will involve in lighter and less traffic accident
 Notice that even after including so many variables, our model only accounts for 5% of the total variability. It is important to understand what other factors leads to what outcome in order to prevent severe traffic accident, whether it is smarter regulation, stricter road tests or better road condition.
 
 So this study provides insight of what affects severity of traffic accidents and how location can affect the accident. This is important for future decision making and accident prevention as we know under what circumstances the accidents may happen and how severe it can be. Still, this is just a very preliminary study and in order to diminish the accidents, more factors have to be included and the states need to learn from each other to find out what factors are contributing the road safety and what are not.
+
+### Reference:
+R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.
